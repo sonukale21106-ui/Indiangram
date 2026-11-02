@@ -4,6 +4,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,7 +19,28 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - run: flutter create . --platforms=android --project-name indiangram
+      - name: Keystore
+        run: |
+          mkdir -p ~/.android
+          if [ -f debug.keystore ]; then
+            cp debug.keystore ~/.android/debug.keystore
+          else
+            keytool -genkeypair -keystore debug.keystore -storepass android -keypass android -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+            cp debug.keystore ~/.android/debug.keystore
+            git config user.name github-actions
+            git config user.email actions@github.com
+            git add debug.keystore
+            git commit -m "Add debug keystore"
+            git push
+          fi
+          keytool -list -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android | grep -i fingerprint
+      - run: flutter create . --platforms=android --org com.indiangram --project-name app
+      - run: flutter pub add firebase_core firebase_auth cloud_firestore
+      - name: Firebase config
+        run: |
+          cp google-services.json android/app/google-services.json
+          sed -i '/id("com.android.application")/a\    id("com.google.gms.google-services") version "4.4.2" apply false' android/settings.gradle.kts
+          sed -i '/id("com.android.application")/a\    id("com.google.gms.google-services")' android/app/build.gradle.kts
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
