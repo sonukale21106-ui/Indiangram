@@ -33,7 +33,7 @@ jobs:
             git commit -m "Add debug keystore"
             git push
           fi
-          keytool -list -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android | grep -i fingerprint
+          keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android | grep -E "SHA1|SHA256"
       - run: flutter create . --platforms=android --org com.indiangram --project-name app
       - run: flutter pub add firebase_core firebase_auth cloud_firestore
       - name: Firebase config
