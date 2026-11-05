@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "908368868860",
+    "project_id": "indiangram-3df1e",
+    "storage_bucket": "indiangram-3df1e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908368868860:android:bf13c92750d45d83c4ae79",
+        "android_client_info": {
+          "package_name": "com.indiangram.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-XJbp1if4_lIE2dYkxI--4Kuak4MSIJk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
